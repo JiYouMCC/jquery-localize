@@ -211,3 +211,14 @@ do ($ = jQuery) ->
     t = localizableTagWithRel("p", "en_us_message", text: "en-US not loaded")
     t.localize("test", opts)
     equal t.text(), "en-US not loaded"
+
+  test "update data-localize and localize again", ->
+    t = $('<div data-localize="string1">original string 1</div>')
+    equal t.text(), "original string 1", "the original string is incorrect."
+    opts = language: "zh", pathPrefix: "lang"
+    t.localize("change", opts)
+    equal t.text(), "string 1 success", "localize 1 fail."
+    t.attr("data-localize", "string2")
+    t.localize("change", opts)
+    equal t.text(), "string 2 success", "localize 2 fail."
+

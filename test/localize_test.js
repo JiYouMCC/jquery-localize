@@ -313,7 +313,7 @@
     t.localize("test", opts);
     return equal(t.text(), "en-US not loaded");
   });
-  return test("skipping language using array match", function() {
+  test("skipping language using array match", function() {
     var opts, t;
     opts = {
       language: "en",
@@ -335,5 +335,19 @@
     });
     t.localize("test", opts);
     return equal(t.text(), "en-US not loaded");
+  });
+  return test("update data-localize and localize again", function() {
+    var opts, t;
+    t = $('<div data-localize="string1">original string 1</div>');
+    equal(t.text(), "original string 1", "the original string is incorrect.");
+    opts = {
+      language: "zh",
+      pathPrefix: "lang"
+    };
+    t.localize("change", opts);
+    equal(t.text(), "string 1 success", "localize 1 fail.");
+    t.attr("data-localize", "string2");
+    t.localize("change", opts);
+    return equal(t.text(), "string 2 success", "localize 2 fail.");
   });
 })(jQuery);

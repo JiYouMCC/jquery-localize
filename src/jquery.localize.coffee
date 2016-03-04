@@ -86,6 +86,8 @@ do ($ = jQuery) ->
       else if     elem.is('img')         then localizeImageElement(elem, key, value)
       else if     elem.is('optgroup')    then localizeOptgroupElement(elem, key, value)
       else unless $.isPlainObject(value) then elem.html(value)
+      if elem.is("[data-toggle='tooltip']")
+        localizeTooltipElement(elem, key, value)
       localizeForSpecialKeys(elem, value) if $.isPlainObject(value)
 
     localizeInputElement = (elem, key, value) ->
@@ -106,6 +108,10 @@ do ($ = jQuery) ->
     localizeImageElement = (elem, key, value) ->
       setAttrFromValueForKey(elem, "alt", value)
       setAttrFromValueForKey(elem, "src", value)
+
+    localizeTooltipElement = (elem, key, value) ->
+      setAttrFromValueForKey(elem, "title", value)
+      setAttrFromValueForKey(elem, "data-original-title", value)
 
     valueForKey = (key, data) ->
       keys  = key.split(/\./)

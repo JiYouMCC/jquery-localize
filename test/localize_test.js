@@ -146,6 +146,59 @@
     equal(t.attr("href"), "http://success");
     return equal(t.text(), "success");
   });
+  test("tooltips", function() {
+    var opts, t;
+    t = localizableTagWithRel("div", "tooltip", {
+      "data-toggle": "tooltip",
+      title: "basic fail",
+      "data-original-title": "basic fail",
+      text: "text fail"
+    });
+    opts = {
+      language: "zh",
+      pathPrefix: "lang"
+    };
+    t.localize("tooltip", opts);
+    equal(t.attr("title"), "title success");
+    equal(t.attr("data-original-title"), "data original title success");
+    equal(t.data("original-title"), "data original title success");
+    return equal(t.text(), "text success");
+  });
+  test("tooltips no text", function() {
+    var opts, t;
+    t = localizableTagWithRel("div", "tooltip no text", {
+      "data-toggle": "tooltip",
+      title: "basic fail",
+      "data-original-title": "basic fail",
+      text: "text success"
+    });
+    opts = {
+      language: "zh",
+      pathPrefix: "lang"
+    };
+    t.localize("tooltip", opts);
+    equal(t.attr("title"), "title success");
+    equal(t.attr("data-original-title"), "data original title success");
+    equal(t.data("original-title"), "data original title success");
+    return equal(t.text(), "text success");
+  });
+  test("not tooltips", function() {
+    var opts, t;
+    t = localizableTagWithRel("div", "tooltip", {
+      title: "title success",
+      "data-original-title": "data original title success",
+      text: "text success"
+    });
+    opts = {
+      language: "zh",
+      pathPrefix: "lang"
+    };
+    t.localize("not tooltip", opts);
+    equal(t.attr("title"), "title success");
+    equal(t.attr("data-original-title"), "data original title success");
+    equal(t.data("original-title"), "data original title success");
+    return equal(t.text(), "text success");
+  });
   test("chained call", function() {
     var t;
     t = localizableTagWithRel("p", "basic", {

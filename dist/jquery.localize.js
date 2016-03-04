@@ -18,7 +18,7 @@ http://keith-wood.name/localisation.html
   };
   $.defaultLanguage = normaliseLang(navigator.languages ? navigator.languages[0] : navigator.language || navigator.userLanguage);
   $.localize = function(pkg, options) {
-    var defaultCallback, fileExtension, intermediateLangData, jsonCall, lang, loadLanguage, localizeElement, localizeForSpecialKeys, localizeImageElement, localizeInputElement, localizeOptgroupElement, notifyDelegateLanguageLoaded, regexify, setAttrFromValueForKey, setTextFromValueForKey, valueForKey, wrappedSet;
+    var defaultCallback, fileExtension, intermediateLangData, jsonCall, lang, loadLanguage, localizeElement, localizeForSpecialKeys, localizeImageElement, localizeInputElement, localizeOptgroupElement, localizeTooltipElement, notifyDelegateLanguageLoaded, regexify, setAttrFromValueForKey, setTextFromValueForKey, valueForKey, wrappedSet;
     if (options == null) {
       options = {};
     }
@@ -115,6 +115,9 @@ http://keith-wood.name/localisation.html
       } else if (!$.isPlainObject(value)) {
         elem.html(value);
       }
+      if (elem.is("[data-toggle='tooltip']")) {
+        localizeTooltipElement(elem, key, value);
+      }
       if ($.isPlainObject(value)) {
         return localizeForSpecialKeys(elem, value);
       }
@@ -139,6 +142,10 @@ http://keith-wood.name/localisation.html
     localizeImageElement = function(elem, key, value) {
       setAttrFromValueForKey(elem, "alt", value);
       return setAttrFromValueForKey(elem, "src", value);
+    };
+    localizeTooltipElement = function(elem, key, value) {
+      setAttrFromValueForKey(elem, "title", value);
+      return setAttrFromValueForKey(elem, "data-original-title", value);
     };
     valueForKey = function(key, data) {
       var keys, value, _i, _len;

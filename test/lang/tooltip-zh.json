@@ -1,0 +1,16 @@
+{
+    "tooltip": {
+        "title":"title success",
+        "data-original-title": "data original title success",
+        "text": "text success"
+    },
+    "tooltip no text": {
+        "title":"title success",
+        "data-original-title": "data original title success"
+    },
+    "not tooltip": {
+        "title":"title fail",
+        "data-original-title": "data original title fail",
+        "text": "text fail"
+    }
+}

@@ -93,6 +93,44 @@ do ($ = jQuery) ->
     equal t.attr("href"), "http://success"
     equal t.text(), "success"
 
+  test "tooltips", ->
+    t = localizableTagWithRel("div", "tooltip", 
+      "data-toggle": "tooltip", 
+      title: "basic fail", 
+      "data-original-title": "basic fail",
+      text: "text fail")
+    opts = language: "zh", pathPrefix: "lang"
+    t.localize("tooltip", opts)
+    equal t.attr("title"), "title success"
+    equal t.attr("data-original-title"), "data original title success"
+    equal t.data("original-title"), "data original title success"
+    equal t.text(), "text success"
+
+  test "tooltips no text", ->
+    t = localizableTagWithRel("div", "tooltip no text", 
+      "data-toggle": "tooltip", 
+      title: "basic fail", 
+      "data-original-title": "basic fail",
+      text: "text success")
+    opts = language: "zh", pathPrefix: "lang"
+    t.localize("tooltip", opts)
+    equal t.attr("title"), "title success"
+    equal t.attr("data-original-title"), "data original title success"
+    equal t.data("original-title"), "data original title success"
+    equal t.text(), "text success"
+
+  test "not tooltips", ->
+    t = localizableTagWithRel("div", "tooltip", 
+      title: "title success", 
+      "data-original-title": "data original title success",
+      text: "text success")
+    opts = language: "zh", pathPrefix: "lang"
+    t.localize("not tooltip", opts)
+    equal t.attr("title"), "title success"
+    equal t.attr("data-original-title"), "data original title success"
+    equal t.data("original-title"), "data original title success"
+    equal t.text(), "text success"
+
   test "chained call", ->
     t = localizableTagWithRel("p", "basic", text: "basic fail")
     t.localize("test", @testOpts).localize("test", @testOpts)

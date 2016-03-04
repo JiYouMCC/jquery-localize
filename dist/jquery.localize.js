@@ -95,7 +95,7 @@ http://keith-wood.name/localisation.html
       return wrappedSet.each(function() {
         var elem, key, value;
         elem = $(this);
-        key = elem.data("localize");
+        key = elem.attr("data-localize");
         key || (key = elem.attr("rel").match(/localize\[(.*?)\]/)[1]);
         value = valueForKey(key, data);
         if (value != null) {

@@ -75,7 +75,7 @@ do ($ = jQuery) ->
       $.localize.data[pkg] = data
       wrappedSet.each ->
         elem  = $(this)
-        key   = elem.data("localize")
+        key   = elem.attr("data-localize")
         key ||= elem.attr("rel").match(/localize\[(.*?)\]/)[1]
         value = valueForKey(key, data)
         localizeElement(elem, key, value) if value?

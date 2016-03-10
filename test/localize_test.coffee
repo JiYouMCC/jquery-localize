@@ -222,3 +222,46 @@ do ($ = jQuery) ->
     t.localize("change", opts)
     equal t.text(), "string 2 success", "localize 2 fail."
 
+  module "Load json value"
+
+  moreSetup ->
+    @jsonData = {
+      "ja":{
+        "test": {
+          "nested": "nested success",
+          "input": "input success",
+          "input_as_obj": {
+              "value": "input_as_obj value success",
+              "title": "input_as_obj title success"
+          },
+          "optgroup": "optgroup success",
+          "option": "option success",
+          "ruby_image": {
+            "src": "ruby_round.gif",
+            "alt": "a round ruby",
+            "title": "A Round Ruby"
+          },
+          "link": {
+            "text": "success",
+            "href": "http://success"
+          }
+        },
+        "basic": "basic success",
+        "with_title": {
+          "text": "with_title text success",
+          "title": "with_title title success"
+        }
+      }
+    }
+    @jsonOpts = language: "ja"
+
+  test "Json basic tag text substitution", ->
+    t = localizableTagWithRel("p", "basic", text: "basic fail")
+    t.localize(@jsonData, @jsonOpts)
+    equal t.text(), "basic success"
+
+  test "Json basic tag text substitution using data-localize instead of rel", ->
+    t = localizableTagWithDataLocalize("p", "basic", text: "basic fail")
+    t.localize(@jsonData, @jsonOpts)
+    equal t.text(), "basic success"
+

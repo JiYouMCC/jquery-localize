@@ -42,6 +42,12 @@ do ($ = jQuery) ->
             file = "#{pkg}-#{lang.substring(0, 5)}.#{fileExtension}"
             jsonCall(file, pkg, lang, level)
 
+    loadJsonLanguage = (json, lang) ->
+      # pathPrefix is no using for json
+      if json[lang]
+        $.extend(intermediateLangData, json[lang])
+        notifyDelegateLanguageLoaded(intermediateLangData)
+
     jsonCall = (file, pkg, lang, level) ->
       file = "#{options.pathPrefix}/#{file}" if options.pathPrefix?
       successFunc = (d) ->
@@ -137,7 +143,10 @@ do ($ = jQuery) ->
         string_or_regex_or_array
 
     lang = normaliseLang(if options.language then options.language else $.defaultLanguage)
-    loadLanguage(pkg, lang, 1) unless (options.skipLanguage && lang.match(regexify(options.skipLanguage)))
+    if typeof pkg is 'string'
+      loadLanguage(pkg, lang, 1) unless (options.skipLanguage && lang.match(regexify(options.skipLanguage)))
+    else
+      loadJsonLanguage(pkg, lang)
 
     wrappedSet
 

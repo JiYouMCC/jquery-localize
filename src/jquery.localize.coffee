@@ -47,6 +47,9 @@ do ($ = jQuery) ->
       if json[lang]
         $.extend(intermediateLangData, json[lang])
         notifyDelegateLanguageLoaded(intermediateLangData)
+      else
+        if options.fallback && options.fallback != lang
+          loadJsonLanguage(json, options.fallback)
 
     jsonCall = (file, pkg, lang, level) ->
       file = "#{options.pathPrefix}/#{file}" if options.pathPrefix?

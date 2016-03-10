@@ -254,6 +254,27 @@ do ($ = jQuery) ->
       }
     }
     @jsonOpts = language: "ja"
+    @jsonData2 = {
+      "ja":{}
+    }
+    @jsonToolTip = {
+      "zh":{
+          "tooltip": {
+              "title":"title success",
+              "data-original-title": "data original title success",
+              "text": "text success"
+          },
+          "tooltip no text": {
+              "title":"title success",
+              "data-original-title": "data original title success"
+          },
+          "not tooltip": {
+              "title":"title fail",
+              "data-original-title": "data original title fail",
+              "text": "text fail"
+          }
+      }
+    }
 
   test "Json basic tag text substitution", ->
     t = localizableTagWithRel("p", "basic", text: "basic fail")
@@ -265,3 +286,146 @@ do ($ = jQuery) ->
     t.localize(@jsonData, @jsonOpts)
     equal t.text(), "basic success"
 
+  test "Json basic tag text substitution with nested key", ->
+    t = localizableTagWithRel("p", "test.nested", text: "nested fail")
+    t.localize(@jsonData, @jsonOpts)
+    equal t.text(), "nested success"
+
+  test "Json basic tag text substitution for special title key", ->
+    t = localizableTagWithDataLocalize("p", "with_title", text: "with_title element fail", title: "with_title title fail")
+    t.localize(@jsonData, @jsonOpts)
+    equal t.text(), "with_title text success"
+    equal t.attr("title"), "with_title title success"
+
+  test "Json input tag value substitution", ->
+    t = localizableTagWithRel("input", "test.input", val: "input fail")
+    t.localize(@jsonData, @jsonOpts)
+    equal t.val(), "input success"
+
+  test "Json input tag value after second localization without key", ->
+    t = localizableTagWithRel("input", "test.input", val: "input fail")
+    t.localize(@jsonData, @jsonOpts)
+    t.localize(@jsonData2, @jsonOpts)
+    equal t.val(), "input success"
+
+  test "Json input tag placeholder substitution", ->
+    t = localizableTagWithRel("input", "test.input", placeholder: "placeholder fail")
+    t.localize(@jsonData, @jsonOpts)
+    equal t.attr("placeholder"), "input success"
+
+  test "Json textarea tag placeholder substitution", ->
+    t = localizableTagWithRel("textarea", "test.input", placeholder: "placeholder fail")
+    t.localize(@jsonData, @jsonOpts)
+    equal t.attr("placeholder"), "input success"
+
+  test "Json titled input tag value substitution", ->
+    t = localizableTagWithRel("input", "test.input_as_obj", val: "input_as_obj fail")
+    t.localize(@jsonData, @jsonOpts)
+    equal t.val(), "input_as_obj value success"
+
+  test "Json titled input tag title substitution", ->
+    t = localizableTagWithRel("input", "test.input_as_obj", val: "input_as_obj fail")
+    t.localize(@jsonData, @jsonOpts)
+    equal t.attr("title"), "input_as_obj title success"
+
+  test "Json titled input tag placeholder substitution", ->
+    t = localizableTagWithRel("input", "test.input_as_obj", placeholder: "placeholder fail")
+    t.localize(@jsonData, @jsonOpts)
+    equal t.attr("placeholder"), "input_as_obj value success"
+
+  test "Json image tag src, alt, and title substitution", ->
+    t = localizableTagWithRel("img", "test.ruby_image", src: "ruby_square.gif", alt: "a square ruby", title: "A Square Ruby")
+    t.localize(@jsonData, @jsonOpts)
+    equal t.attr("src"), "ruby_round.gif"
+    equal t.attr("alt"), "a round ruby"
+    equal t.attr("title"), "A Round Ruby"
+
+  test "Json link tag href substitution", ->
+    t = localizableTagWithRel("a", "test.link", href: "http://fail", text: "fail")
+    t.localize(@jsonData, @jsonOpts)
+    equal t.attr("href"), "http://success"
+    equal t.text(), "success"
+
+  test "Json tooltips", ->
+    t = localizableTagWithRel("div", "tooltip", 
+      "data-toggle": "tooltip", 
+      title: "basic fail", 
+      "data-original-title": "basic fail",
+      text: "text fail")
+    opts = language: "zh"
+    t.localize(@jsonToolTip, opts)
+    equal t.attr("title"), "title success"
+    equal t.attr("data-original-title"), "data original title success"
+    equal t.data("original-title"), "data original title success"
+    equal t.text(), "text success"
+
+  test "Json tooltips no text", ->
+    t = localizableTagWithRel("div", "tooltip no text", 
+      "data-toggle": "tooltip", 
+      title: "basic fail", 
+      "data-original-title": "basic fail",
+      text: "text success")
+    opts = language: "zh"
+    t.localize(@jsonToolTip, opts)
+    equal t.attr("title"), "title success"
+    equal t.attr("data-original-title"), "data original title success"
+    equal t.data("original-title"), "data original title success"
+    equal t.text(), "text success"
+
+  test "Json not tooltips", ->
+    t = localizableTagWithRel("div", "tooltip", 
+      title: "title success", 
+      "data-original-title": "data original title success",
+      text: "text success")
+    opts = language: "zh"
+    t.localize(@jsonToolTip, opts)
+    equal t.attr("title"), "title success"
+    equal t.attr("data-original-title"), "data original title success"
+    equal t.data("original-title"), "data original title success"
+    equal t.text(), "text success"
+
+  test "Json chained call", ->
+    t = localizableTagWithRel("p", "basic", text: "basic fail")
+    t.localize(@jsonData, @jsonOpts).localize(@jsonData, @jsonOpts)
+    equal t.text(), "basic success"
+
+  moreSetup ->
+    @t = $('<select>
+        <optgroup rel="localize[test.optgroup]" label="optgroup fail">
+          <option rel="localize[test.option]" value="1">option fail</option>
+        </optgroup>
+      </select>')
+
+  test "Json optgroup tag label substitution", ->
+    t = @t.find("optgroup")
+    t.localize(@jsonData, @jsonOpts)
+    equal t.attr("label"), "optgroup success"
+
+  test "Json option tag text substitution", ->
+    t = @t.find("option")
+    t.localize(@jsonData, @jsonOpts)
+    equal t.text(), "option success"
+
+  test "Json fallback language loads", ->
+    opts = language: "fo", fallback: "ja"
+    t = localizableTagWithRel("p", "basic", text: "basic fail")
+    t.localize(@jsonData, @jsonOpts)
+    equal t.text(), "basic success"
+
+  test "Json custom callback is fired", ->
+    opts = language: "ja"
+    opts.callback = (data, defaultCallback) ->
+      data.custom_callback = "custom callback success"
+      defaultCallback(data)
+    t = localizableTagWithRel("p", "custom_callback", text: "custom callback fail")
+    t.localize(@jsonData, opts)
+    equal t.text(), "custom callback success"
+
+  test "Json language with country code", ->
+    jsonData = {
+      "ja-XX":{ "message": "country code success" }
+    }
+    opts = language: "ja-XX"
+    t = localizableTagWithRel("p", "message", text: "country code fail")
+    t.localize(jsonData, opts)
+    equal t.text(), "country code success"

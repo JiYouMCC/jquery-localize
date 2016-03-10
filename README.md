@@ -1,6 +1,6 @@
 # jquery.localize.js
 
-[![Build Status](https://travis-ci.org/coderifous/jquery-localize.png?branch=master)](https://travis-ci.org/coderifous/jquery-localize)
+[![Build Status](https://travis-ci.org/JiYouMCC/jquery-localize.svg?branch=master)](https://travis-ci.org/JiYouMCC/jquery-localize)
 
 A jQuery plugin that makes it easy to i18n your static web site.
 
